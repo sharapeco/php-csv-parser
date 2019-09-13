@@ -10,8 +10,7 @@ CSVParser can:
 
 Basic:
 
-```
-<?php
+```PHP
 $csv = 'aaa,bbb,ccc
 ddd,eee,fff
 ggg,hhh,iii';
@@ -28,8 +27,7 @@ $parser->parse($csv);
 
 Associate with key:
 
-```
-<?php
+```PHP
 $csv = 'aaa,bbb,ccc
 ddd,eee,fff
 ggg,hhh,iii';
@@ -47,8 +45,7 @@ $parser->parse($csv, $keys);
 
 Render CSV:
 
-```
-<?php
+```PHP
 $rows = [
     ['foo' => 'aaa', 'bar' => 'bbb', 'baz' => 'ccc'],
     ['foo' => 'ddd', 'bar' => 'eee', 'baz' => 'fff'],
@@ -63,7 +60,7 @@ $parser->render($rows, $header);
 
 ## Settings
 
-```
+```PHP
 $parser = new CSVParser([
     'csv_encoding' => 'sjis-win',
 	...
