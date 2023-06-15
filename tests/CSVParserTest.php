@@ -1,24 +1,27 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
 use sharapeco\CSVParser\CSVParser;
 
-final class CSVParserTest extends TestCase {
-
-	private function getCSV(string $name): string {
+final class CSVParserTest extends TestCase
+{
+	private function getCSV(string $name): string
+	{
 		return file_get_contents(__DIR__ . '/csv/' . $name . '.csv');
 	}
 
 	/**
 	 * @test
 	 */
-	public function testBasic() {
+	public function testBasic()
+	{
 		$parser = new CSVParser();
 		$this->assertEquals(
 			$parser->parse($this->getCSV('basic')),
 			[
-				['basic','csv','file'],
-				['line','number','two'],
-				['line','number','three'],
+				['basic', 'csv', 'file'],
+				['line', 'number', 'two'],
+				['line', 'number', 'three'],
 			]
 		);
 	}
@@ -26,14 +29,15 @@ final class CSVParserTest extends TestCase {
 	/**
 	 * @test
 	 */
-	public function testEmptyCell() {
+	public function testEmptyCell()
+	{
 		$parser = new CSVParser();
 		$this->assertEquals(
 			$parser->parse($this->getCSV('emptycell')),
 			[
-				['basic','csv','file'],
-				['line','number','two'],
-				['line','three'],
+				['basic', 'csv', 'file'],
+				['line', 'number', 'two'],
+				['line', 'three'],
 			]
 		);
 	}
@@ -41,14 +45,15 @@ final class CSVParserTest extends TestCase {
 	/**
 	 * @test
 	 */
-	public function testNewlines() {
+	public function testNewlines()
+	{
 		$parser = new CSVParser();
 		$this->assertEquals(
 			$parser->parse($this->getCSV('newlines')),
 			[
-				['basic','csv','file'],
-				['line','number','two'],
-				['line','number','three'],
+				['basic', 'csv', 'file'],
+				['line', 'number', 'two'],
+				['line', 'number', 'three'],
 			]
 		);
 	}
@@ -56,7 +61,8 @@ final class CSVParserTest extends TestCase {
 	/**
 	 * @test
 	 */
-	public function testQuote() {
+	public function testQuote()
+	{
 		$parser = new CSVParser();
 		$this->assertEquals(
 			$parser->parse($this->getCSV('quote')),
@@ -69,16 +75,17 @@ final class CSVParserTest extends TestCase {
 	/**
 	 * @test
 	 */
-	public function testTSV() {
+	public function testTSV()
+	{
 		$parser = new CSVParser([
 			'delimiter' => "\t",
 		]);
 		$this->assertEquals(
 			$parser->parse($this->getCSV('tsv')),
 			[
-				['basic','TAB separated value','file'],
-				['line','number','two'],
-				['line','number','three'],
+				['basic', 'TAB separated value', 'file'],
+				['line', 'number', 'two'],
+				['line', 'number', 'three'],
 			]
 		);
 	}
@@ -86,14 +93,15 @@ final class CSVParserTest extends TestCase {
 	/**
 	 * @test
 	 */
-	public function testUTF8BOM() {
+	public function testUTF8BOM()
+	{
 		$parser = new CSVParser();
 		$this->assertEquals(
 			$parser->parse($this->getCSV('utf8bom')),
 			[
-				['with BOM','csv','file'],
-				['line','number','two'],
-				['line','number','three'],
+				['with BOM', 'csv', 'file'],
+				['line', 'number', 'two'],
+				['line', 'number', 'three'],
 			]
 		);
 	}
@@ -101,16 +109,17 @@ final class CSVParserTest extends TestCase {
 	/**
 	 * @test
 	 */
-	public function testShiftJISWin() {
+	public function testShiftJISWin()
+	{
 		$parser = new CSVParser([
 			'csv_encoding' => 'sjis-win',
 		]);
 		$this->assertEquals(
 			$parser->parse($this->getCSV('sjis')),
 			[
-				['CP932','csv','file'],
-				['行','番号','２'],
-				['行','番号','３'],
+				['CP932', 'csv', 'file'],
+				['行', '番号', '２'],
+				['行', '番号', '３'],
 			]
 		);
 	}
@@ -118,7 +127,8 @@ final class CSVParserTest extends TestCase {
 	/**
 	 * @test
 	 */
-	public function testAssociate() {
+	public function testAssociate()
+	{
 		$parser = new CSVParser();
 		$this->assertEquals(
 			$parser->parse($this->getCSV('basic'), ['first', 'second', 'third']),
@@ -133,7 +143,8 @@ final class CSVParserTest extends TestCase {
 	/**
 	 * @test
 	 */
-	public function testAssociateWithEmptyCell() {
+	public function testAssociateWithEmptyCell()
+	{
 		$parser = new CSVParser();
 		$this->assertEquals(
 			$parser->parse($this->getCSV('emptycell'), ['first', 'second', 'third']),
@@ -148,11 +159,11 @@ final class CSVParserTest extends TestCase {
 	/**
 	 * @test
 	 */
-	public function testUnterminated() {
+	public function testUnterminated()
+	{
 		$this->expectException(\sharapeco\CSVParser\StructException::class);
 
 		$parser = new CSVParser();
 		$parser->parse($this->getCSV('unterminated'));
 	}
-
 }

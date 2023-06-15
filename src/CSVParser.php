@@ -1,17 +1,21 @@
 <?php
+
 namespace sharapeco\CSVParser;
 
 use \Exception;
 use \InvalidArgumentException;
 
-function str_contains($str, $search) {
+function str_contains($str, $search)
+{
 	return strpos($str, $search) !== false;
 }
 
-class StructException extends Exception {}
+class StructException extends Exception
+{
+}
 
-class CSVParser {
-
+class CSVParser
+{
 	protected $internalEncoding = 'UTF-8';
 	protected $csvEncoding = 'UTF-8';
 
@@ -20,7 +24,8 @@ class CSVParser {
 	protected $escapedQuotation = '""';
 	protected $newline = "\n";
 
-	public function __construct(array $options = []) {
+	public function __construct(array $options = [])
+	{
 		if (isset($options['internal_encoding'])) {
 			$this->internalEncoding = $options['internal_encoding'];
 		}
@@ -38,7 +43,8 @@ class CSVParser {
 		}
 	}
 
-	public function parse($csv, array $header = null) {
+	public function parse($csv, array $header = null)
+	{
 
 		// UTF-8 の BOM がついている場合は除去する
 		if (strtoupper($this->csvEncoding) === 'UTF-8') {
@@ -50,7 +56,7 @@ class CSVParser {
 		if ($csv === '') {
 			return [];
 		}
-		
+
 		$rows = $this->parse_($csv);
 		if ($header) {
 			return $this->associate($rows, $header);
@@ -59,7 +65,8 @@ class CSVParser {
 		}
 	}
 
-	public function associate(array $rows, array $header = null) {
+	public function associate(array $rows, array $header = null)
+	{
 		if (count($rows) === 0) {
 			return [];
 		}
@@ -82,7 +89,8 @@ class CSVParser {
 		return $associatedRows;
 	}
 
-	public function render(array $associatedRows, array $header = null, $printHeader = false) {
+	public function render(array $associatedRows, array $header = null, $printHeader = false)
+	{
 		if (count($associatedRows) === 0) {
 			return '';
 		}
@@ -112,7 +120,8 @@ class CSVParser {
 		return mb_convert_encoding($csv, $this->csvEncoding, $this->internalEncoding);
 	}
 
-	protected function parse_($csv) {
+	protected function parse_($csv)
+	{
 		$csvlen = strlen($csv);
 		$ld = strlen($this->delimiter);
 		$lq = strlen($this->quotation);
@@ -176,23 +185,27 @@ class CSVParser {
 		return $lines;
 	}
 
-	protected function escape($val) {
-		if (!str_contains($val, "\n") &&
+	protected function escape($val)
+	{
+		if (
+			!str_contains($val, "\n") &&
 			!str_contains($val, "\r") &&
 			!str_contains($val, $this->quotation) &&
-			!str_contains($val, $this->delimiter)) {
+			!str_contains($val, $this->delimiter)
+		) {
 			return $val;
 		} else {
 			return $this->quote($val);
 		}
 	}
 
-	protected function quote($val) {
+	protected function quote($val)
+	{
 		return $this->quotation . str_replace($this->quotation, $this->escapedQuotation, $val) . $this->quotation;
 	}
 
-	protected function unescape($val) {
+	protected function unescape($val)
+	{
 		return $val;
 	}
-
 }
